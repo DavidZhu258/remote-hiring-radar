@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "remote-hiring-radar"
+version = "0.1.0"
+description = "Small remote hiring signal radar with deterministic scoring and reviewable evidence."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "SignalFeed" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+remote-hiring-radar = "remote_hiring_radar.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
