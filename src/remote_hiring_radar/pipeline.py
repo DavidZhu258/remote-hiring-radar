@@ -51,11 +51,12 @@ def score_job(job: JobListing) -> ScoredJob:
 
 def build_report(jobs: Iterable[JobListing], threshold: int = 60, limit: int = 20) -> RadarReport:
     unique_jobs = dedupe_jobs(jobs)
-    scored = sorted((score_job(job) for job in unique_jobs), key=lambda item: item.score, reverse=True)
+    scored = sorted(
+        (score_job(job) for job in unique_jobs), key=lambda item: item.score, reverse=True
+    )
     shortlisted = tuple(item for item in scored if item.score >= threshold)[:limit]
     return RadarReport(
         title="Remote Hiring Radar",
         total_seen=len(unique_jobs),
         shortlisted=shortlisted,
     )
-

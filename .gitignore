@@ -5,6 +5,9 @@ __pycache__/
 .ruff_cache/
 .venv/
 venv/
+node_modules/
+.next/
+*.tsbuildinfo
 build/
 dist/
 *.egg-info/
@@ -13,4 +16,3 @@ dist/
 !.env.example
 out/
 data/local/
-
