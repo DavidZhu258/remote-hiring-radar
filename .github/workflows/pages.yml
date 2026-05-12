@@ -8,22 +8,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -48,16 +43,17 @@ jobs:
           NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8010
           NEXT_PUBLIC_ENABLE_DEMO_FALLBACK: "true"
         run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: frontend/out
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish static preview to gh-pages
+        run: |
+          set -euo pipefail
+          tmp_dir="$(mktemp -d)"
+          cp -R frontend/out/. "$tmp_dir/"
+          touch "$tmp_dir/.nojekyll"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan gh-pages-publish
+          git rm -rf . >/dev/null 2>&1 || true
+          cp -R "$tmp_dir"/. .
+          git add -A
+          git commit -m "Deploy GitHub Pages"
+          git push --force origin HEAD:gh-pages
