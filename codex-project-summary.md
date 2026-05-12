@@ -35,6 +35,8 @@ Implement the first vertical product slice: Fresh Remote AI/Data/Agent/Vision Jo
 - 2026-05-12: Local API started on `127.0.0.1:8010` against ClickHouse `analytics.jobs`; `/api/health` reports connected, latest `posted_date=2026-05-08`, stale warning true.
 - 2026-05-12: `/api/jobs?days=30&source=foorilla.com&limit=1` returns real ClickHouse data and Foorilla source/apply links both redirect through the configured auth entry.
 - 2026-05-12: After Foorilla link changes, local verification passed: `python -m pytest -q`, `python -m ruff check .`, `python -m ruff format --check .`, `python -m compileall src tests`, `python scripts\secret_scan.py`, `npm test`, `npm run lint`, `npm run typecheck`, `npm run build`, and GitHub Pages static export build.
+- 2026-05-12: Local API autostart configured for the current Windows user via Startup VBS `RemoteHiringRadarAPI.vbs`; it launches a local supervisor script under `%LOCALAPPDATA%\RemoteHiringRadar` and keeps FastAPI on `127.0.0.1:8010`.
+- 2026-05-12: Autostart path verified manually: API health returns connected, port `8010` is listening, and `/api/jobs?days=30&source=foorilla.com&limit=1` returns Foorilla data with redirected source/apply links.
 
 ## Notes
 
@@ -43,3 +45,4 @@ Implement the first vertical product slice: Fresh Remote AI/Data/Agent/Vision Jo
 - Pages preview uses `NEXT_PUBLIC_ENABLE_DEMO_FALLBACK=true`; real data still requires the local FastAPI service.
 - For GitHub operations in this session, the classic PAT file was used directly to avoid Git Credential Manager prompts. Do not print token contents.
 - If the Pages UI shows demo data, make sure the local FastAPI process is running on `127.0.0.1:8010`; the static page cannot host the API or ClickHouse itself.
+- Local autostart secrets live outside the repo in the local env file; do not commit or print them.
