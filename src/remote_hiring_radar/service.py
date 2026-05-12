@@ -4,6 +4,7 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import date
 
+from .links import apply_link_url, source_link_url
 from .models import JobListing
 from .quality import evaluate_job_quality, normalize_duplicate_key
 from .repository import JobRepository, safe_days, sort_jobs_newest_first
@@ -140,6 +141,8 @@ def serialize_job(job: JobListing, quality: object) -> dict[str, object]:
         "source": job.source,
         "source_url": job.source_url,
         "apply_url": job.apply_url,
+        "source_link_url": source_link_url(job),
+        "apply_link_url": apply_link_url(job),
         "freshness_bucket": quality.freshness_bucket,
         "source_trust": quality.source_trust,
         "remote_quality": quality.remote_quality,

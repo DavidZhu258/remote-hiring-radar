@@ -14,5 +14,6 @@ dist/
 .env
 .env.*
 !.env.example
+.codex/logs/
 out/
 data/local/

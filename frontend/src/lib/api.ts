@@ -23,6 +23,8 @@ export type JobItem = {
   source: string;
   source_url: string;
   apply_url: string;
+  source_link_url: string;
+  apply_link_url: string;
   freshness_bucket: string;
   source_trust: string;
   remote_quality: string;

@@ -96,6 +96,11 @@ Required ClickHouse settings:
 - `CLICKHOUSE_DATABASE=analytics`
 - `RADAR_DEFAULT_DAYS=7`
 
+Optional Foorilla link settings:
+
+- `FOORILLA_AUTH_URL`: current Foorilla login/auth URL. Foorilla job links append `next=<job_url>`.
+- `FOORILLA_LINK_TEMPLATE`: exact link template with `{url}` when Foorilla changes the redirect parameter.
+
 ## CI
 
 GitHub Actions runs Python tests, ruff checks, compile checks, API smoke tests, secret scan, and frontend test/lint/typecheck/build on every push and pull request.

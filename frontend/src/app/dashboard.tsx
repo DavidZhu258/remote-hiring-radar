@@ -345,11 +345,11 @@ function createColumns(onSelect: (job: JobItem) => void): ColumnDef<JobItem>[] {
       accessorKey: "source_url",
       cell: ({ row }) => (
         <div className="link-row">
-          <a href={row.original.source_url} onClick={(event) => event.stopPropagation()} rel="noreferrer" target="_blank">
+          <a href={row.original.source_link_url || row.original.source_url} onClick={(event) => event.stopPropagation()} rel="noreferrer" target="_blank">
             <ExternalLink size={15} /> Source
           </a>
-          {row.original.apply_url ? (
-            <a href={row.original.apply_url} onClick={(event) => event.stopPropagation()} rel="noreferrer" target="_blank">
+          {row.original.apply_link_url ? (
+            <a href={row.original.apply_link_url} onClick={(event) => event.stopPropagation()} rel="noreferrer" target="_blank">
               Apply
             </a>
           ) : null}
@@ -377,10 +377,10 @@ function JobDrawer({ job, onClose }: { job: JobItem; onClose: () => void }) {
         </button>
       </div>
       <div className="drawer-links">
-        <a href={job.source_url} rel="noreferrer" target="_blank">
+        <a href={job.source_link_url || job.source_url} rel="noreferrer" target="_blank">
           <ExternalLink size={16} /> Source evidence
         </a>
-        {job.apply_url ? <a href={job.apply_url} rel="noreferrer" target="_blank">Apply</a> : null}
+        {job.apply_link_url ? <a href={job.apply_link_url} rel="noreferrer" target="_blank">Apply</a> : null}
       </div>
       <section>
         <h3>Signals</h3>
