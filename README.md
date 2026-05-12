@@ -63,6 +63,26 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+## GitHub Pages Preview
+
+The frontend can also be exported as a static GitHub Pages preview:
+
+```bash
+cd frontend
+$env:GITHUB_PAGES="true"
+$env:NEXT_PUBLIC_API_BASE_URL="http://127.0.0.1:8010"
+$env:NEXT_PUBLIC_ENABLE_DEMO_FALLBACK="true"
+npm run build
+```
+
+GitHub Actions deploys `frontend/out` to:
+
+`https://davidzhu258.github.io/remote-hiring-radar/`
+
+The Pages build uses demo fallback data when the local API is not reachable. To inspect
+real ClickHouse data from the Pages UI on your own machine, run the FastAPI service on
+`127.0.0.1:8010`.
+
 ## Configuration
 
 Copy `.env.example` to `.env` for local runs. Keep real tokens in environment variables or a secret manager, never in the repo.

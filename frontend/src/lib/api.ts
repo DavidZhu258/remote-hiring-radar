@@ -1,6 +1,8 @@
 import { buildApiQuery, type DashboardFilters } from "./filters";
+import { getDemoResponse } from "./demo";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const ENABLE_DEMO_FALLBACK = process.env.NEXT_PUBLIC_ENABLE_DEMO_FALLBACK === "true";
 
 export type JobItem = {
   job_id: string;
@@ -74,15 +76,23 @@ export async function fetchHealth(signal?: AbortSignal): Promise<HealthResponse>
 }
 
 async function fetchJson<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    signal,
-    headers: {
-      Accept: "application/json",
-    },
-  });
-  if (!response.ok) {
-    const detail = await response.text();
-    throw new Error(detail || `Request failed with ${response.status}`);
+  try {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      signal,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    if (!response.ok) {
+      const detail = await response.text();
+      throw new Error(detail || `Request failed with ${response.status}`);
+    }
+    return response.json() as Promise<T>;
+  } catch (error) {
+    const demoResponse = getDemoResponse(path);
+    if (ENABLE_DEMO_FALLBACK && demoResponse) {
+      return demoResponse as T;
+    }
+    throw error;
   }
-  return response.json() as Promise<T>;
 }

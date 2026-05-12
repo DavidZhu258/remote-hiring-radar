@@ -24,6 +24,7 @@ def create_app(
             "http://localhost:3010",
             "http://127.0.0.1:3000",
             "http://127.0.0.1:3010",
+            "https://davidzhu258.github.io",
         ],
         allow_credentials=False,
         allow_methods=["GET"],
