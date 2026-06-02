@@ -17,6 +17,7 @@ class JobRepository(Protocol):
         q: str = "",
         source: str = "",
         max_rows: int = 5000,
+        ordered: bool = True,
     ) -> list[JobListing]: ...
 
     def latest_posted_date(self) -> date | None: ...
@@ -36,6 +37,7 @@ class InMemoryJobRepository:
         q: str = "",
         source: str = "",
         max_rows: int = 5000,
+        ordered: bool = True,
     ) -> list[JobListing]:
         latest = self.latest_posted_date() or date.today()
         cutoff = latest - timedelta(days=days)
@@ -75,18 +77,22 @@ class ClickHouseJobRepository:
         q: str = "",
         source: str = "",
         max_rows: int = 5000,
+        ordered: bool = True,
     ) -> list[JobListing]:
         client = self._client()
-        conditions = ["posted_date >= today() - INTERVAL %(days)s DAY"]
+        prewhere_conditions = ["posted_date >= today() - INTERVAL %(days)s DAY"]
+        where_conditions: list[str] = []
         params: dict[str, object] = {
             "days": safe_days(days),
             "max_rows": max(1, min(max_rows, 20000)),
         }
-        if source:
-            conditions.append("lower(source_name) = lower(%(source)s)")
-            params["source"] = source
-        if q:
-            conditions.append(
+        source_filter = source.strip()
+        if source_filter:
+            prewhere_conditions.append("source_name = %(source)s")
+            params["source"] = source_filter
+        keyword = q.strip()
+        if keyword:
+            where_conditions.append(
                 "("
                 "positionCaseInsensitive(title, %(q)s) > 0 OR "
                 "positionCaseInsensitive(company, %(q)s) > 0 OR "
@@ -96,8 +102,10 @@ class ClickHouseJobRepository:
                 "positionCaseInsensitive(skills, %(q)s) > 0"
                 ")"
             )
-            params["q"] = q
+            params["q"] = keyword
 
+        where_sql = f"WHERE {' AND '.join(where_conditions)}" if where_conditions else ""
+        order_sql = "ORDER BY posted_date DESC, job_id DESC" if ordered else ""
         query = f"""
             SELECT
                 job_id,
@@ -120,8 +128,9 @@ class ClickHouseJobRepository:
                 apply_url,
                 posted_date
             FROM jobs
-            WHERE {" AND ".join(conditions)}
-            ORDER BY posted_date DESC, created_at DESC
+            PREWHERE {" AND ".join(prewhere_conditions)}
+            {where_sql}
+            {order_sql}
             LIMIT %(max_rows)s
         """
         rows = client.query(query, parameters=params).result_rows

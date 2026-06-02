@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from .repository import ClickHouseJobRepository, JobRepository
-from .service import JobFilters, get_facets, get_health, get_jobs
+from .service import JobFilters, get_facets, get_health, get_jobs, get_overview
 
 
 def create_app(
@@ -47,9 +47,9 @@ def create_app(
         source: str = "",
         q: str = "",
         hide_reposts: bool = False,
-        limit: int = Query(50, ge=1, le=100),
+        limit: int = Query(500, ge=1, le=500),
         offset: int = Query(0, ge=0),
-        sort: str = "fresh",
+        sort: str = "best_for_me",
     ) -> dict[str, object]:
         filters = JobFilters(
             days=days,
@@ -74,6 +74,17 @@ def create_app(
             return get_facets(repo, JobFilters(days=days, q=q), today=today())
         except Exception as exc:  # noqa: BLE001
             raise HTTPException(status_code=503, detail="Facet query unavailable") from exc
+
+    @app.get("/api/overview")
+    def overview(
+        days: int = Query(7, ge=1, le=30),
+        source: str = "",
+        q: str = "",
+    ) -> dict[str, object]:
+        try:
+            return get_overview(repo, JobFilters(days=days, source=source, q=q), today=today())
+        except Exception as exc:  # noqa: BLE001
+            raise HTTPException(status_code=503, detail="Overview query unavailable") from exc
 
     return app
 

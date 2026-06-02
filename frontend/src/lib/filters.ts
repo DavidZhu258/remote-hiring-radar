@@ -1,5 +1,5 @@
 export type DayWindow = "1" | "3" | "7" | "30";
-export type DashboardSort = "fresh" | "company" | "source";
+export type DashboardSort = "best_for_me" | "fresh" | "target_fit" | "company" | "source";
 
 export type DashboardFilters = {
   days: DayWindow;
@@ -22,9 +22,9 @@ export const DEFAULT_FILTERS: DashboardFilters = {
   source: "",
   q: "",
   hideReposts: false,
-  limit: 50,
+  limit: 500,
   offset: 0,
-  sort: "fresh",
+  sort: "best_for_me",
 };
 
 export function buildApiQuery(filters: DashboardFilters): URLSearchParams {
@@ -54,6 +54,10 @@ export function buildApiQuery(filters: DashboardFilters): URLSearchParams {
   return params;
 }
 
+export function needsCanonicalQuery(params: URLSearchParams, filters: DashboardFilters): boolean {
+  return params.toString() !== buildApiQuery(filters).toString();
+}
+
 export function readFilters(params: URLSearchParams): DashboardFilters {
   const days = normalizeDays(params.get("days"));
   const sort = normalizeSort(params.get("sort"));
@@ -70,7 +74,7 @@ export function readFilters(params: URLSearchParams): DashboardFilters {
     source: params.get("source") ?? "",
     q: params.get("q") ?? "",
     hideReposts: params.get("hide_reposts") === "true",
-    limit: normalizeNumber(params.get("limit"), DEFAULT_FILTERS.limit, 1, 100),
+    limit: normalizeNumber(params.get("limit"), DEFAULT_FILTERS.limit, 1, 500),
     offset: normalizeNumber(params.get("offset"), DEFAULT_FILTERS.offset, 0, 10000),
     sort,
   };
@@ -84,13 +88,22 @@ function normalizeDays(value: string | null): DayWindow {
 }
 
 function normalizeSort(value: string | null): DashboardSort {
-  if (value === "fresh" || value === "company" || value === "source") {
+  if (
+    value === "best_for_me" ||
+    value === "fresh" ||
+    value === "target_fit" ||
+    value === "company" ||
+    value === "source"
+  ) {
     return value;
   }
   return DEFAULT_FILTERS.sort;
 }
 
 function normalizeNumber(value: string | null, fallback: number, min: number, max: number): number {
+  if (value === null || value.trim() === "") {
+    return fallback;
+  }
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) {
     return fallback;

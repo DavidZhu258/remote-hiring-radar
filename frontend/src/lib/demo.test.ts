@@ -27,4 +27,32 @@ describe("getDemoResponse", () => {
       stale: false,
     });
   });
+
+  it("returns demo overview counts for the data audit panel", () => {
+    const response = getDemoResponse("/api/overview?days=30");
+
+    expect(response).toMatchObject({
+      total_observed: 4,
+      coverage: {
+        salary: {
+          count: 2,
+          ratio: 0.5,
+        },
+      },
+    });
+    expect(response && "top_sources" in response ? response.top_sources[0] : null).toEqual({
+      name: "foorilla.com",
+      count: 1,
+      ratio: 0.25,
+    });
+  });
+
+  it("uses the dashboard default page size for demo jobs", () => {
+    const response = getDemoResponse("/api/jobs?days=7");
+
+    expect(response).toMatchObject({
+      limit: 500,
+      offset: 0,
+    });
+  });
 });
