@@ -5,12 +5,15 @@ __pycache__/
 .ruff_cache/
 .venv/
 venv/
+node_modules/
+.next/
+*.tsbuildinfo
 build/
 dist/
 *.egg-info/
 .env
 .env.*
 !.env.example
+.codex/logs/
 out/
 data/local/
-

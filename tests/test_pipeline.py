@@ -39,4 +39,3 @@ def test_report_shortlists_only_good_matches() -> None:
 
     assert report.total_seen == 2
     assert len(report.shortlisted) == 1
-

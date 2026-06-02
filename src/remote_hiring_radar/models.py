@@ -15,6 +15,18 @@ class JobListing:
     posted_at: date | None = None
     salary_text: str = ""
     tags: tuple[str, ...] = ()
+    job_id: str = ""
+    requirements: str = ""
+    responsibilities: str = ""
+    benefits: str = ""
+    skills: str = ""
+    job_type: str = ""
+    salary_detail: str = ""
+    budget_min: float | None = None
+    budget_max: float | None = None
+    budget_currency: str = ""
+    apply_url: str = ""
+    raw: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -29,4 +41,3 @@ class RadarReport:
     title: str
     total_seen: int
     shortlisted: tuple[ScoredJob, ...]
-

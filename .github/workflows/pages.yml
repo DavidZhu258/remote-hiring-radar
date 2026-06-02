@@ -1,0 +1,59 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - feature/fresh-remote-jobs-dashboard
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+      - name: Test
+        working-directory: frontend
+        run: npm test
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+      - name: Typecheck
+        working-directory: frontend
+        run: npm run typecheck
+      - name: Build static preview
+        working-directory: frontend
+        env:
+          GITHUB_PAGES: "true"
+          NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8010
+          NEXT_PUBLIC_ENABLE_DEMO_FALLBACK: "true"
+        run: npm run build
+      - name: Publish static preview to gh-pages
+        run: |
+          set -euo pipefail
+          tmp_dir="$(mktemp -d)"
+          cp -R frontend/out/. "$tmp_dir/"
+          touch "$tmp_dir/.nojekyll"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan gh-pages-publish
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -R "$tmp_dir"/. .
+          git add -A
+          git commit -m "Deploy GitHub Pages"
+          git push --force origin HEAD:gh-pages
