@@ -1,0 +1,41 @@
+{
+  "status": "pass",
+  "generated_at": "2026-06-08T17:24:47Z",
+  "repo": "remote-hiring-radar",
+  "seed_path": "evals\\gold\\seed_gold.jsonl",
+  "seed_case_count": 3,
+  "hard_negative_count": 2,
+  "referenced_file_count": 7,
+  "referenced_files": {
+    "README.md": {
+      "size_bytes": 2356,
+      "sha256": "6b534f55036b7b7722f541be485bae0540d149cc9c16e2bf9c23bab24dea4ac8"
+    },
+    "docs/architecture.md": {
+      "size_bytes": 914,
+      "sha256": "66f26547df94644392c26bffb53695574f02aacee09fca2fff2c07ec239b2cac"
+    },
+    "tests/test_pipeline.py": {
+      "size_bytes": 1306,
+      "sha256": "5ec70bd6293180a41d4c3f48cb0440f89c9c54e25a4690307dbe598c406f5f2f"
+    },
+    "src/remote_hiring_radar/pipeline.py": {
+      "size_bytes": 2134,
+      "sha256": "4ffb93f1388346c98913c8819f134378b1432e306ed0b78b4f142c111d534e9e"
+    },
+    "src/remote_hiring_radar/models.py": {
+      "size_bytes": 635,
+      "sha256": "ef5654c6ee6265649e4166b02c6399a9b1a2d8889679668e3093a3015aaea138"
+    },
+    "scripts/secret_scan.py": {
+      "size_bytes": 1291,
+      "sha256": "404044d485601793edb441e1873ecc0bd95b78c1f47ce59748a54d63aabb76d1"
+    },
+    ".env.example": {
+      "size_bytes": 252,
+      "sha256": "c8f22462f149a9186cdb01a329c767b1f85139e3a0bec7c736078ea179b9a8b7"
+    }
+  },
+  "failures": [],
+  "note": "This validates gold seed traceability and feasibility scaffolding; it does not claim model-quality scores yet."
+}

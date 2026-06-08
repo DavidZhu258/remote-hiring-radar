@@ -1,0 +1,25 @@
+repo: "remote-hiring-radar"
+eval_type: "ranking"
+schema: "ranking_case.schema.json"
+gold_target: "150"
+scoring:
+  accuracy_weight: 0.70
+  feasibility_weight: 0.30
+  seed_suite_required: true
+  hard_negatives_required: true
+metrics:
+  - precision_at_10
+  - ndcg_at_20
+  - false_positive_rate
+  - eligibility_error_rate
+  - reason_agreement
+  - cost_per_100_jobs
+reporting_fields:
+  - run_id
+  - git_commit
+  - dataset_version
+  - accuracy_summary
+  - feasibility_summary
+  - failures
+  - cost
+  - latency

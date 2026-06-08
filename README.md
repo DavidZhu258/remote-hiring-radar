@@ -53,3 +53,11 @@ Copy `.env.example` to `.env` for local runs. Keep real tokens in environment va
 
 GitHub Actions runs tests, compile checks, and a lightweight secret scan on every push and pull request.
 
+## Evaluation Evidence
+
+This repository includes a seed-gold evaluation scaffold under `evals/`.
+
+- Plan: [`gold_testset_plan.md`](gold_testset_plan.md)
+- Current results: [`EVAL_RESULTS.md`](EVAL_RESULTS.md)
+- Latest machine-readable validation: [`evals/results/latest_seed_validation.json`](evals/results/latest_seed_validation.json)
+- GitHub Actions: `Eval Seed Validation`
