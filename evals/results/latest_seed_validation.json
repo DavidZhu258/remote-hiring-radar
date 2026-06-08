@@ -1,6 +1,6 @@
 {
   "status": "pass",
-  "generated_at": "2026-06-08T17:13:46Z",
+  "generated_at": "2026-06-08T17:24:47Z",
   "repo": "remote-hiring-radar",
   "seed_path": "evals\\gold\\seed_gold.jsonl",
   "seed_case_count": 3,
@@ -8,8 +8,8 @@
   "referenced_file_count": 7,
   "referenced_files": {
     "README.md": {
-      "size_bytes": 2358,
-      "sha256": "95b94e6c8abba460875af91e75f92c15a99168dab3102657d928a4621b89945d"
+      "size_bytes": 2356,
+      "sha256": "6b534f55036b7b7722f541be485bae0540d149cc9c16e2bf9c23bab24dea4ac8"
     },
     "docs/architecture.md": {
       "size_bytes": 914,

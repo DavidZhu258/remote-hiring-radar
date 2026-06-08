@@ -61,4 +61,3 @@ This repository includes a seed-gold evaluation scaffold under `evals/`.
 - Current results: [`EVAL_RESULTS.md`](EVAL_RESULTS.md)
 - Latest machine-readable validation: [`evals/results/latest_seed_validation.json`](evals/results/latest_seed_validation.json)
 - GitHub Actions: `Eval Seed Validation`
-

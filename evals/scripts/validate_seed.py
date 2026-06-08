@@ -85,7 +85,7 @@ def validate(root: Path) -> dict[str, Any]:
     status = "pass" if not failures else "fail"
     return {
         "status": status,
-        "generated_at": _dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+        "generated_at": _dt.datetime.now(_dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "repo": cases[0].get("repo") if cases else root.name,
         "seed_path": str(seed_path.relative_to(root)),
         "seed_case_count": len(cases),
